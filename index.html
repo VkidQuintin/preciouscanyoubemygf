@@ -1,0 +1,131 @@
+<!--Skeleton-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I Have a Question...</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #ffe4e1;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        #container {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        h1 {
+            color: #d63384;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            height: 100px;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        #yesBtn {
+            background-color: #4caf50;
+            color: white;
+            z-index: 100;
+        }
+
+        #noBtn {
+            background-color: #f44336;
+            color: white;
+            position: relative;
+        }
+
+        .celebration {
+            display: none;
+        }
+
+        img {
+            width: 150px;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="container">
+        <div id="askSection">
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHIyc3JpZzR3eHByYnZqZ3R4eHh4eHh4eHh4eHh4eHh4eHh4eHh4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/26hp8u2F9zXfJvUWI/giphy.gif" alt="Cute heart">
+            <h1>Will you be my girlfriend? ❤️</h1>
+            <div class="buttons">
+                <button id="yesBtn">Yes</button>
+                <button id="noBtn">No</button>
+            </div>
+        </div>
+
+        <div id="celebration" class="celebration">
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHIyc3JpZzR3eHByYnZqZ3R4eHh4eHh4eHh4eHh4eHh4eHh4eHh4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/l41lH4ADRtAYnGsLe/giphy.gif" alt="Yay">
+            <h1>Yay! I knew you'd say yes! 🥰</h1>
+            <p>Prepare for a lifetime of memes and snacks.</p>
+        </div>
+    </div>
+
+    <script>
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const askSection = document.getElementById('askSection');
+        const celebration = document.getElementById('celebration');
+        
+        let yesSize = 1.2;
+        let noSize = 1.2;
+
+        // The "No" button runs away
+        noBtn.addEventListener('mouseover', () => {
+            // Move No button to a random position
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = `${x}px`;
+            noBtn.style.top = `${y}px`;
+
+            // Make Yes button grow
+            yesSize += 0.4;
+            yesBtn.style.transform = `scale(${yesSize})`;
+            
+            // Make No button shrink (optional but funny)
+            noSize -= 0.1;
+            if (noSize > 0.5) {
+                noBtn.style.transform = `scale(${noSize})`;
+            }
+        });
+
+        // The success action
+        yesBtn.addEventListener('click', () => {
+            askSection.style.display = 'none';
+            celebration.style.display = 'block';
+            document.body.style.backgroundColor = '#ffc0cb';
+        });
+    </script>
+</body>
+</html>
