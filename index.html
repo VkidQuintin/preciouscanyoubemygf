@@ -1,35 +1,68 @@
-<!--Skeleton-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>I Have a Question...</title>
+    <title>I Have a Question... ✨</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
+        :root {
+            --pink-light: #fce4ec;
+            --pink-medium: #f8bbd0;
+            --pink-main: #f06292;
+            --pink-dark: #ad1457;
+        }
+
         body {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #ffe4e1;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            text-align: center;
+            background: linear-gradient(135deg, var(--pink-light) 0%, #fff5f8 100%);
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
             overflow: hidden;
         }
 
         #container {
             background: white;
             padding: 3rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(240, 98, 146, 0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            border: 2px solid var(--pink-medium);
+            z-index: 10;
+        }
+
+        #fakeLoader {
+            width: 200px;
+            height: 200px;
+            background: #f0f0f0;
+            border: 2px dashed #ccc;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 1.5rem;
+            border-radius: 15px;
+            color: #888;
+            font-size: 0.8rem;
+        }
+
+        .main-gif {
+            width: 200px;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+            display: none;
         }
 
         h1 {
-            color: #d63384;
-            font-size: 2rem;
+            color: var(--pink-dark);
+            font-size: 1.8rem;
             margin-bottom: 2rem;
+            font-weight: 600;
         }
 
         .buttons {
@@ -37,94 +70,132 @@
             justify-content: center;
             align-items: center;
             gap: 20px;
-            height: 100px;
+            height: 150px;
         }
 
         button {
-            padding: 15px 30px;
-            font-size: 1.2rem;
+            padding: 12px 25px;
+            font-size: 1.1rem;
             border: none;
-            border-radius: 10px;
+            border-radius: 50px;
             cursor: pointer;
-            transition: transform 0.2s ease;
+            font-weight: 600;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         #yesBtn {
-            background-color: #4caf50;
-            color: white;
-            z-index: 100;
-        }
-
-        #noBtn {
-            background-color: #f44336;
+            background-color: #ff80ab;
             color: white;
             position: relative;
         }
 
-        .celebration {
-            display: none;
+        #noBtn {
+            background-color: #eee;
+            color: #666;
+            position: relative;
         }
 
-        img {
-            width: 150px;
-            margin-bottom: 1rem;
+        .laugh-emoji {
+            position: fixed;
+            font-size: 2rem;
+            pointer-events: none;
+            animation: fadeOutUp 1s forwards;
+            z-index: 9999;
         }
+
+        @keyframes fadeOutUp {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-50px); }
+        }
+
+        .celebration { display: none; }
     </style>
 </head>
 <body>
 
     <div id="container">
         <div id="askSection">
-            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHIyc3JpZzR3eHByYnZqZ3R4eHh4eHh4eHh4eHh4eHh4eHh4eHh4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/26hp8u2F9zXfJvUWI/giphy.gif" alt="Cute heart">
-            <h1>Will you be my girlfriend? ❤️</h1>
-            <div class="buttons">
+            <div id="fakeLoader">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <p>Content Unavailable</p>
+            </div>
+
+            <img id="mainGif" class="main-gif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHIyc3JpZzR3eHByYnZqZ3R4eHh4eHh4eHh4eHh4eHh4eHh4eHh4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/26hp8u2F9zXfJvUWI/giphy.gif">
+            
+            <h1 id="questionText">Processing...</h1>
+            
+            <div class="buttons" id="btnWrapper" style="display: none;">
                 <button id="yesBtn">Yes</button>
                 <button id="noBtn">No</button>
             </div>
         </div>
 
         <div id="celebration" class="celebration">
-            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHIyc3JpZzR3eHByYnZqZ3R4eHh4eHh4eHh4eHh4eHh4eHh4eHh4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/l41lH4ADRtAYnGsLe/giphy.gif" alt="Yay">
-            <h1>Yay! I knew you'd say yes! 🥰</h1>
-            <p>Prepare for a lifetime of memes and snacks.</p>
+            <img class="main-gif" style="display:block; margin: 0 auto 1.5rem;" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHIyc3JpZzR3eHByYnZqZ3R4eHh4eHh4eHh4eHh4eHh4eHh4eHh4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/l41lH4ADRtAYnGsLe/giphy.gif">
+            <h1>Yay! I knew it! 😂❤️</h1>
+            <p style="color: #ad1457;">You're stuck with me now!</p>
         </div>
     </div>
 
     <script>
         const yesBtn = document.getElementById('yesBtn');
         const noBtn = document.getElementById('noBtn');
-        const askSection = document.getElementById('askSection');
-        const celebration = document.getElementById('celebration');
+        const fakeLoader = document.getElementById('fakeLoader');
+        const mainGif = document.getElementById('mainGif');
+        const questionText = document.getElementById('questionText');
+        const btnWrapper = document.getElementById('btnWrapper');
         
-        let yesSize = 1.2;
-        let noSize = 1.2;
+        let yesSize = 1;
 
-        // The "No" button runs away
-        noBtn.addEventListener('mouseover', () => {
-            // Move No button to a random position
+        // Fake loading sequence
+        setTimeout(() => {
+            fakeLoader.style.display = 'none';
+            mainGif.style.display = 'block';
+            questionText.innerText = "Will you be my girlfriend? ❤️";
+            btnWrapper.style.display = 'flex';
+        }, 1500);
+
+        function showLaugh(x, y) {
+            const laughs = ['😂', '🤣', '🤭', '😜'];
+            const div = document.createElement('div');
+            div.className = 'laugh-emoji';
+            div.innerText = laughs[Math.floor(Math.random() * laughs.length)];
+            div.style.left = x + 'px';
+            div.style.top = y + 'px';
+            document.body.appendChild(div);
+            setTimeout(() => div.remove(), 1000);
+        }
+
+        function moveButton() {
             const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
             const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
             
-            noBtn.style.position = 'absolute';
+            // Show laughing emoji where she tried to click
+            showLaugh(event.clientX || x, event.clientY || y);
+
+            noBtn.style.position = 'fixed';
             noBtn.style.left = `${x}px`;
             noBtn.style.top = `${y}px`;
 
-            // Make Yes button grow
             yesSize += 0.4;
             yesBtn.style.transform = `scale(${yesSize})`;
-            
-            // Make No button shrink (optional but funny)
-            noSize -= 0.1;
-            if (noSize > 0.5) {
-                noBtn.style.transform = `scale(${noSize})`;
-            }
-        });
+        }
 
-        // The success action
+        noBtn.addEventListener('mouseover', moveButton);
+        noBtn.addEventListener('click', moveButton);
+
         yesBtn.addEventListener('click', () => {
-            askSection.style.display = 'none';
-            celebration.style.display = 'block';
-            document.body.style.backgroundColor = '#ffc0cb';
+            document.getElementById('askSection').style.display = 'none';
+            document.getElementById('celebration').style.display = 'block';
+            
+            // Confetti Cannon!
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff80ab', '#f06292', '#ad1457', '#ffffff']
+            });
         });
     </script>
 </body>
